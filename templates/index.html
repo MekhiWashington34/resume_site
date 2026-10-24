@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>{{ profile.name }}</title>
+  <meta name="description" content="{{ profile.name }}: {{ profile.role }}. {{ about[0] }}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
+  <link rel="stylesheet" href="static/style.css">
+</head>
+<body>
+<div class="page">
+  <aside class="id">
+    <div class="monogram" aria-hidden="true">{{ profile.initials }}</div>
+    <div>
+      <h1>{{ profile.name }}</h1>
+      <p class="role"><strong>{{ profile.role }}</strong> {{ profile.tagline }}</p>
+    </div>
+
+    <div class="contact">
+      <div class="row">
+        <span class="label">Email</span>
+        <a class="value" id="email" href="mailto:{{ profile.email }}">{{ profile.email }}</a>
+        <button class="copy" type="button" data-copy="{{ profile.email }}">Copy</button>
+      </div>
+      <div class="row">
+        <span class="label">LinkedIn</span>
+        <a class="value" href="{{ profile.linkedin[1] }}" target="_blank" rel="noopener">{{ profile.linkedin[0] }}</a>
+      </div>
+      <div class="row">
+        <span class="label">GitHub</span>
+        <a class="value" href="{{ profile.github[1] }}" target="_blank" rel="noopener">{{ profile.github[0] }}</a>
+      </div>
+    </div>
+
+    <div class="skills">
+      <h2>Skills</h2>
+      {% for group, items, core in skills %}
+      <div class="skillgroup">
+        <span class="k">{{ group }}</span>
+        <div class="chips">
+          {% for s in items %}<span class="chip{% if s in core %} core{% endif %}">{{ s }}</span>{% endfor %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </aside>
+
+  <main class="main">
+    <section class="about" aria-labelledby="about-h">
+      <h2 id="about-h">About</h2>
+      {% for p in about %}<p>{{ p }}</p>{% endfor %}
+    </section>
+
+    <section aria-labelledby="exp-h">
+      <h2 id="exp-h">Experience</h2>
+      <ol class="log">
+        {% for job in experience %}
+        <li class="entry">
+          <div class="when">{{ job.start|ym }} – {{ job.end|ym }}<span class="dur">{{ duration(job.start, job.end) }}</span></div>
+          <div class="what">
+            <h3>{{ job.title }}</h3>
+            <p class="org">{{ job.where }}</p>
+            <ul>{% for b in job.bullets %}<li>{{ b }}</li>{% endfor %}</ul>
+            <div class="tags">{% for t in job.tags %}<span class="chip">{{ t }}</span>{% endfor %}</div>
+          </div>
+        </li>
+        {% endfor %}
+      </ol>
+    </section>
+
+    <section aria-labelledby="proj-h">
+      <h2 id="proj-h">Projects</h2>
+      <div class="projects">
+        {% for p in projects %}
+        <article class="project{% if p.featured %} featured{% endif %}">
+          <span class="meta">{{ p.meta }}</span>
+          <h3>{{ p.name }}</h3>
+          <p>{{ p.text }}</p>
+        </article>
+        {% endfor %}
+      </div>
+    </section>
+
+    <section aria-labelledby="edu-h">
+      <h2 id="edu-h">Education</h2>
+      <ol class="log">
+        {% for e in education %}
+        <li class="entry">
+          <div class="when">{{ e.start|ym }} – {{ e.end|ym }}</div>
+          <div class="what"><h3>{{ e.title }}</h3><p class="org">{{ e.where }}</p></div>
+        </li>
+        {% endfor %}
+      </ol>
+    </section>
+
+    <section aria-labelledby="work-h">
+      <h2 id="work-h">Other work</h2>
+      <ul class="jobs">
+        {% for w in other_work %}
+        <li><span class="name">{{ w.name }} <span>· {{ w.where }}</span></span><span class="dates">{{ w.start|ym }} – {{ w.end|ym }}</span></li>
+        {% endfor %}
+      </ul>
+    </section>
+
+    <footer>{{ footer }}</footer>
+  </main>
+</div>
+<script src="static/copy.js"></script>
+</body>
+</html>
